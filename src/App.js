@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import DogList from "./DogList";
+import DogDetails from "./DogDetails";
 import hazel from "./imgs/hazel.jpg";
 import tubby from "./imgs/tubby.jpg";
 import whiskey from "./imgs/whiskey.jpg";
@@ -42,8 +43,21 @@ class App extends Component {
     ]
   };
   render() {
-    return <Route path="/dogs" render={()=><DogList dogs={this.props.dogs}/>} />;
+    // logic to get specific dog
+    const getDog = props => {
+      let name = props.match.params.name;
+      let currentDog = this.props.dogs.find(
+        dog => dog.name.toLowerCase() === name.toLowerCase()
+      );
+      return <DogDetails {...props} dog={currentDog}/>
+    }
+    return(
+      <Switch>
+        <Route exact path="/dogs" render={()=><DogList dogs={this.props.dogs}/>} />;
+        <Route exact path="/dogs/:name" render={(getDog)} />;
+      </Switch>
 
+    );
   }
 }
 
